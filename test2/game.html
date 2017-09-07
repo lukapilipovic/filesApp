@@ -1,0 +1,100 @@
+<html>
+
+<head>
+	<title>Papir - Kamen - Makaze</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/functions.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+
+
+<script>
+
+
+
+$(document).ready(function(){
+	
+	var gameOptions = ["Papir", "Kamen", "Makaze"];
+	
+	
+	//setInterval(rotateImages('#player1choice',gameOptions), 3000);	
+    
+    $("#play").click(function(){
+        
+    	//gameOptions
+    	
+
+    	//clear message and result display
+    	$("#result").html('');
+    	$("#message").html('');
+
+    	//play game
+    	output = playGame(gameOptions);
+
+    	//get outcome
+    	outcome = output[0];
+    	player1 = output[1];
+    	player2 = output[2];
+
+
+
+        //display outcome and result
+        $("#play").prop('value', 'Play again');
+
+		$("#player1").html('<img src="img/' + player1 + '.png">');
+		$("#player2").html('<img src="img/' + player2 + '.png">');
+
+        $("#message").append(message);
+
+       	//add score to the scoreboard
+       	var winner = "#playerScore"+outcome;
+       	var p1 = $(winner).html();
+       	var newResult = parseInt(p1) + 1;
+       	$(winner).html(newResult) ;
+
+
+
+    });
+});
+
+	
+
+
+</script>
+
+</head>
+
+
+<body>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+
+<div class="container">
+	<div class="row">
+		<section class="col-md-12 text-center">
+			<h1>Two player game</h1>
+		</section>
+		<section class="col-md-12 text-center outcome">
+			<section class="col-md-6 text-center" id="player1"><img src="img/Kamen.png" id="player1choice"></section>
+			<section class="col-md-6 text-center" id="player2"><img src="img/Makaze.png"></section>
+		</section>
+		<section class="col-md-12 text-center message">
+			<p id="message"></p>
+		</section>
+		<section class="col-md-12 text-center">
+			<input type="button" id="play" value="Play game">
+		</section>
+
+		<section class = "col-md-12 results text-center">
+		<h1>Results</h1>
+			<section class="col-md-6 text-center" id="playerScore1">0</section>
+			<section class="col-md-6 text-center" id="playerScore2">0</section>
+		</section>
+
+
+	</div>
+</div>
+
+</body>
+
+</html>
