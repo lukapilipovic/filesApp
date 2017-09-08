@@ -1,25 +1,41 @@
+<!DOCTYPE html>
 <html>
-<head>
+    <head>
+        <script>
+            function loadXMLDoc(dname)
+            {
+                if (window.XMLHttpRequest)
+                {
+                    xhttp=new XMLHttpRequest();
+                }
+                else
+                {
+                    xhttp=new ActiveXObject("Microsoft.XMLDOM");
+                }
+                xhttp.open("GET",dname,true);
+                xhttp.send();
+                return xhttp.responseXML;
+            }
+        </script>
+    </head>
+    <body>
+        <script>
+            xmlDoc=loadXMLDoc('map.xml');
 
-	<script type="text/javascript" src="js/app.js"></script>
-	<link rel="stylesheet" href="css/style.css">
+            console.log(xmlDoc);
 
+            txt = "";
+			x = xmlDoc.getElementsByTagName("ARTIST");
+			for (i = 0; i < x.length; i++) {
+				txt += x[i].childNodes[0].nodeValue + "<br>";
+}
+			document.getElementById("demo").innerHTML = txt;
 
+            //document.write(xmlDoc.getElementsByTagName("Folder")[0].nodeValue + "   <br>");
+            //document.write(xmlDoc.getElementsByTagName("files")[0].nodeValue + "<br>");
 
+        </script>
 
-</head>
-<body>
-<div id="container">
-
-
-<script type="text/javascript">
-
-
-
-
-</script>
-
-
-</div>
-</body>
+			<div id="demo"></div>
+    </body>
 </html>
