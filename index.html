@@ -1,41 +1,57 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script>
-            function loadXMLDoc(dname)
-            {
-                if (window.XMLHttpRequest)
-                {
-                    xhttp=new XMLHttpRequest();
-                }
-                else
-                {
-                    xhttp=new ActiveXObject("Microsoft.XMLDOM");
-                }
-                xhttp.open("GET",dname,true);
-                xhttp.send();
-                return xhttp.responseXML;
-            }
-        </script>
+    <link rel="stylesheet" href="css/style.css">
+
     </head>
     <body>
-        <script>
-            xmlDoc=loadXMLDoc('map.xml');
 
-            console.log(xmlDoc);
+    <div id="demo">a</div>
+        <script type="text/javascript">
+        let fragment = document.createDocumentFragment();
+            let url = 'http://localhost:63342/filesApp/json-mini.json';
 
-            txt = "";
-			x = xmlDoc.getElementsByTagName("ARTIST");
-			for (i = 0; i < x.length; i++) {
-				txt += x[i].childNodes[0].nodeValue + "<br>";
-}
-			document.getElementById("demo").innerHTML = txt;
 
-            //document.write(xmlDoc.getElementsByTagName("Folder")[0].nodeValue + "   <br>");
-            //document.write(xmlDoc.getElementsByTagName("files")[0].nodeValue + "<br>");
+            let jR = fetch(url).then(
+
+                    function(response){
+                            return response.json();
+                        }).then(function(jsonData){
+
+                            let folderName = "";
+                            for (let key of Object.keys(jsonData)) {
+                                if (key == "folderUrl"){
+                                    folderName = jsonData[key];
+
+                                }
+                                //console.log(key, jsonData[key]);
+                                else if (key == "folderElements")
+                                {
+                                    let i = 0;
+                                    for (let image of jsonData[key]){
+
+                                        let x = document.createElement("img");
+                                        x.src = folderName + "/svg/" + image;
+                                        x.id = "img" + i;
+                                        x.className = "icon";
+                                        fragment.appendChild(x);
+
+                                        i++;
+
+                                    }
+
+                                }
+
+                            }
+
+                            document.getElementById("demo").appendChild(fragment);
+                            return fragment;
+                        });
+
+
 
         </script>
 
-			<div id="demo"></div>
+
     </body>
 </html>
