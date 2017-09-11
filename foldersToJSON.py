@@ -7,6 +7,7 @@ def DirAsJSON(path):
     result = ''
     dirs = []
     files = []
+
     for item in os.listdir(path):
         itempath = os.path.join(path, item)
         if os.path.isdir(itempath):
@@ -23,9 +24,17 @@ def DirAsJSON(path):
                 continue
     if files:
         result += '\n \"folderElements\" : ['
-        for x in files:
-            result += '\"%s\",' % (x)
+
+        last = len(files) - 1
+
+        for i, x in enumerate(files):
+            if i == last:
+                result += '\"%s\"' % (x)
+
+            else:
+                result += '\"%s\",' % (x)
         result += ']'
+
 
     if dirs:
         for d in dirs:
@@ -38,12 +47,12 @@ def DirAsJSON(path):
                 result += '\"folderUrl\": \"' + path + '/' + d + '\",\n'
                 x = DirAsJSON(os.path.join(path, d))
                 result += ''.join(line for line in x.split('\n'))
-                result += '\n}\n'
+                result += '\n},\n'
     return result
 
 if __name__ == '__main__':
 
     print (DirAsJSON('IconsDesign'))
-    # f = open('map.json', 'w')
-    # output = DirAsXML('IconsDesign')
-    # f.write(output)
+    f = open('map.json', 'w')
+    output = DirAsJSON('IconsDesign')
+    f.write(output)

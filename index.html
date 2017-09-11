@@ -5,11 +5,15 @@
 
     </head>
     <body>
-
-    <div id="demo">a</div>
+    <div id="selector"></div>
+    <div id="demo"></div>
         <script type="text/javascript">
         let fragment = document.createDocumentFragment();
-            let url = 'http://localhost:63342/filesApp/json-mini.json';
+            let url = 'http://localhost:63342/filesApp/map.json';
+
+            let selectFolder = document.createElement("SELECT");
+            selectFolder.id = "selectFolder";
+            document.getElementById("selector").appendChild(selectFolder);
 
 
             let jR = fetch(url).then(
@@ -18,34 +22,77 @@
                             return response.json();
                         }).then(function(jsonData){
 
-                            let folderName = "";
-                            for (let key of Object.keys(jsonData)) {
-                                if (key == "folderUrl"){
-                                    folderName = jsonData[key];
 
-                                }
-                                //console.log(key, jsonData[key]);
-                                else if (key == "folderElements")
-                                {
-                                    let i = 0;
-                                    for (let image of jsonData[key]){
+                            let a = 0;
+                            let b = 0;
+                            for (let itemKey of Object.keys(jsonData)) {
 
-                                        let x = document.createElement("img");
-                                        x.src = folderName + "/svg/" + image;
-                                        x.id = "img" + i;
-                                        x.className = "icon";
-                                        fragment.appendChild(x);
+                                console.log("itemList: ");
+                                let itemsList = jsonData[itemKey];
+                                console.log(itemsList);
 
-                                        i++;
+
+                                for (let itemKey of Object.keys(itemsList)) {
+
+                                    a++;
+                                    let item = itemsList[itemKey];
+                                    console.log("item" + a + ": ");
+                                    console.log(item);
+
+                                    let folderUrl = "";
+                                    let folderName = "";
+                                    for (let key of Object.keys(item)) {
+
+
+                                        if (key == "folderName") {
+
+                                            folderName = item[key];
+                                            let s = document.getElementById("selectFolder");
+                                            let option = document.createElement("option");
+                                            option.text = folderName;
+                                            s.add(option);
+
+                                        }
+
+
+                                        else if (key == "folderUrl") {
+                                            folderUrl = item[key];
+                                            console.log(folderUrl);
+                                        }
+
+
+                                        //console.log(key, jsonData[key]);
+                                        else if ((key == "folderElements") && (folderName == document.getElementById("selectFolder").value)){
+                                            let i = 0;
+                                            for (let im of Object.keys(item[key])) {
+                                                let image = item[key][im];
+
+                                                let y = document.createElement("div");
+                                                y.id = "imgConatiner" + i;
+                                                let x = document.createElement("img");
+                                                x.src = folderUrl + "/svg/" + image;
+                                                x.id = "img" + i;
+                                                x.className = "icon";
+                                                y.appendChild(x);
+                                                y.appendChild(document.createTextNode(image));
+                                                fragment.appendChild(y);
+
+                                                i++
+                                            }
+
+                                        }
+
+                                        }
 
                                     }
+                                    document.getElementById("demo").appendChild(fragment);
+                                    return fragment;
 
                                 }
 
-                            }
 
-                            document.getElementById("demo").appendChild(fragment);
-                            return fragment;
+
+
                         });
 
 
