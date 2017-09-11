@@ -12,12 +12,26 @@
             let url = 'http://localhost:63342/filesApp/map.json';
 
             let selectFolder = document.createElement("SELECT");
+
             selectFolder.id = "selectFolder";
+
+            let option1 = document.createElement("option");
+            option1.text = "Ascending";
+            option1.value = "ASC";
+            selectFolder.add(option1);
+            let option2 = document.createElement("option");
+            option2.text = "Descending";
+            option2.value = "DESC";
+            selectFolder.add(option2);
             document.getElementById("selector").appendChild(selectFolder);
+            selectFolder.onchange = function (e){
+
+                sortFoldersASC(e.target.value);
+            };
 
 
 
-            let showFolder = function (url,currFolder,firstLoad = true) {
+            let showFolder = function (url) {
 
                 document.getElementById("demo").innerHTML = "";
 
@@ -47,33 +61,41 @@
 
                             let folderUrl = "";
                             let folderName = "";
+
+                            let fragment = document.createDocumentFragment();
+
                             for (let key of Object.keys(item)) {
 
 
-                                if (key == "folderName") {
 
-                                    folderName = item[key];
-                                    if (firstLoad == true) {
-                                        let s = document.getElementById("selectFolder");
-                                        let option = document.createElement("option");
-                                        option.text = folderName;
-                                        option.value = folderName;
-                                        s.add(option);
-                                    }
+                                let newSection;
+
+                                if (key == "folderName") {
+                                    newSection = document.createElement("div");
+                                    newSection.innerHTML = "<h1>"+item[key]+"</h1>";
+                                    newSection.id = item[key];
+                                    newSection.className = "folder";
+                                    fragment.appendChild(newSection);
+
+                                         document.getElementById("demo").appendChild(fragment);
 
                                 }
-
 
                                 else if (key == "folderUrl") {
                                     folderUrl = item[key];
-                                    console.log(folderUrl);
+
                                 }
 
 
+
+
+
+
                                 //console.log(key, jsonData[key]);
-                                else if ((key == "folderElements") && (folderName == currFolder)) {
-                                let fragment = document.createDocumentFragment();
+                                else if (key == "folderElements") {
+
                                     let i = 0;
+                                    let fragment1 = document.createDocumentFragment();
                                     for (let im of Object.keys(item[key])) {
                                         let image = item[key][im];
 
@@ -84,13 +106,24 @@
                                         x.src = folderUrl + "/svg/" + image;
                                         x.id = "img" + i;
                                         x.className = "icon";
+
+                                        let dl = document.createElement('a');
+                                        let dlImage = document.createElement("img");
+                                        dlImage.src = "img/dl.png";
+                                        dlImage.className = "dlButton";
+                                        dl.href=folderUrl + "/svg/" + image;
+                                        dl.appendChild(dlImage);
+                                        dl.download = image;
                                         y.appendChild(x);
+                                        y.appendChild(dl);
                                         //y.appendChild(document.createTextNode(image));
-                                        fragment.appendChild(y);
+                                        fragment1.appendChild(y);
 
                                         i++
+
                                     }
-                                    document.getElementById("demo").appendChild(fragment);
+
+                                   document.getElementById("demo").lastChild.appendChild(fragment1);
 
                                 }
 
@@ -109,12 +142,25 @@
                 return jR;
             };
 
-            showFolder(url,"interface");
 
-            let elem = document.getElementById("selectFolder");
-            elem.onchange = function (e){
-                 showFolder(url,e.target.value,false);
-            }//
+
+
+            sortFoldersASC = function(param) {
+                let main = document.getElementById( 'demo' );
+
+
+                [].map.call( main.children, Object ).sort( function ( a, b ) {
+                    //return +a.id.match( /\d+/ ) - +b.id.match( /\d+/ );
+                    return +a.id.match( /\d+/ ) - +b.id.match( /\d+/ );
+                }).forEach( function ( elem ) {
+                    main.appendChild( elem );
+                });
+
+
+            };
+
+            showFolder(url);
+
 
 
         </script>

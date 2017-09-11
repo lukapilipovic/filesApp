@@ -9,7 +9,7 @@
 #demo {
     position: relative;
     float: right;
-    width: 450px;
+    width: 100%;
 }
 
 #selector {
@@ -24,4 +24,22 @@
     float: left;
     width: 150px;
     text-align: center;
+}
+
+.folder {
+    clear:both;
+
+}
+
+.dlButton{
+    width: 15px;
+    heigth: 15px;
+
+}
+
+h1{
+    background: #7c9192;
+    font-family: Arial,Verdana;
+
+
 }
