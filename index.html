@@ -8,7 +8,7 @@
     <div id="selector"></div>
     <div id="demo"></div>
         <script type="text/javascript">
-        let fragment = document.createDocumentFragment();
+
             let url = 'http://localhost:63342/filesApp/map.json';
 
             let selectFolder = document.createElement("SELECT");
@@ -16,85 +16,105 @@
             document.getElementById("selector").appendChild(selectFolder);
 
 
-            let jR = fetch(url).then(
 
-                    function(response){
-                            return response.json();
-                        }).then(function(jsonData){
+            let showFolder = function (url,currFolder,firstLoad = true) {
 
-
-                            let a = 0;
-                            let b = 0;
-                            for (let itemKey of Object.keys(jsonData)) {
-
-                                console.log("itemList: ");
-                                let itemsList = jsonData[itemKey];
-                                console.log(itemsList);
+                document.getElementById("demo").innerHTML = "";
 
 
-                                for (let itemKey of Object.keys(itemsList)) {
-
-                                    a++;
-                                    let item = itemsList[itemKey];
-                                    console.log("item" + a + ": ");
-                                    console.log(item);
-
-                                    let folderUrl = "";
-                                    let folderName = "";
-                                    for (let key of Object.keys(item)) {
+                let jR = fetch(url).then(
+                    function (response) {
+                        return response.json();
+                    }).then(function (jsonData) {
 
 
-                                        if (key == "folderName") {
 
-                                            folderName = item[key];
-                                            let s = document.getElementById("selectFolder");
-                                            let option = document.createElement("option");
-                                            option.text = folderName;
-                                            s.add(option);
+                    let a = 0;
+                    let b = 0;
+                    for (let itemKey of Object.keys(jsonData)) {
 
-                                        }
-
-
-                                        else if (key == "folderUrl") {
-                                            folderUrl = item[key];
-                                            console.log(folderUrl);
-                                        }
+                        console.log("itemList: ");
+                        let itemsList = jsonData[itemKey];
+                        console.log(itemsList);
 
 
-                                        //console.log(key, jsonData[key]);
-                                        else if ((key == "folderElements") && (folderName == document.getElementById("selectFolder").value)){
-                                            let i = 0;
-                                            for (let im of Object.keys(item[key])) {
-                                                let image = item[key][im];
+                        for (let itemKey of Object.keys(itemsList)) {
 
-                                                let y = document.createElement("div");
-                                                y.id = "imgConatiner" + i;
-                                                let x = document.createElement("img");
-                                                x.src = folderUrl + "/svg/" + image;
-                                                x.id = "img" + i;
-                                                x.className = "icon";
-                                                y.appendChild(x);
-                                                y.appendChild(document.createTextNode(image));
-                                                fragment.appendChild(y);
+                            a++;
+                            let item = itemsList[itemKey];
+                            console.log("item" + a + ": ");
+                            console.log(item);
 
-                                                i++
-                                            }
+                            let folderUrl = "";
+                            let folderName = "";
+                            for (let key of Object.keys(item)) {
 
-                                        }
 
-                                        }
+                                if (key == "folderName") {
 
+                                    folderName = item[key];
+                                    if (firstLoad == true) {
+                                        let s = document.getElementById("selectFolder");
+                                        let option = document.createElement("option");
+                                        option.text = folderName;
+                                        option.value = folderName;
+                                        s.add(option);
                                     }
-                                    document.getElementById("demo").appendChild(fragment);
-                                    return fragment;
 
                                 }
 
 
+                                else if (key == "folderUrl") {
+                                    folderUrl = item[key];
+                                    console.log(folderUrl);
+                                }
 
 
-                        });
+                                //console.log(key, jsonData[key]);
+                                else if ((key == "folderElements") && (folderName == currFolder)) {
+                                let fragment = document.createDocumentFragment();
+                                    let i = 0;
+                                    for (let im of Object.keys(item[key])) {
+                                        let image = item[key][im];
 
+                                        let y = document.createElement("div");
+                                        y.id = "imgConatiner" + i;
+                                        y.className = "imgContainer";
+                                        let x = document.createElement("img");
+                                        x.src = folderUrl + "/svg/" + image;
+                                        x.id = "img" + i;
+                                        x.className = "icon";
+                                        y.appendChild(x);
+                                        //y.appendChild(document.createTextNode(image));
+                                        fragment.appendChild(y);
+
+                                        i++
+                                    }
+                                    document.getElementById("demo").appendChild(fragment);
+
+                                }
+
+                            }
+
+
+                        }
+
+
+
+                    }
+
+
+                });
+
+                return jR;
+            };
+
+            showFolder(url,"interface");
+
+            let elem = document.getElementById("selectFolder");
+            elem.onchange = function (e){
+                 showFolder(url,e.target.value,false);
+            }//
 
 
         </script>
