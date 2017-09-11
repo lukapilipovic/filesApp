@@ -54,5 +54,7 @@ if __name__ == '__main__':
 
     print (DirAsJSON('IconsDesign'))
     f = open('map.json', 'w')
-    output = DirAsJSON('IconsDesign')
+    output = "{list : \n["
+    output += DirAsJSON('IconsDesign')
+    output += "]\n}"
     f.write(output)
