@@ -5,14 +5,24 @@
     <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-    <script type="text/javascript" src="js/functions.js"></script>
+    <script type="text/javascript" src="js/settings.js"></script>
+    <script type="text/javascript" src="js/FileManager.js"></script>
+
+
     <div id="selector"></div>
     <div id="demo"></div>
 
 
         <script type="text/javascript">
 
-            let url = 'http://localhost:63342/filesApp/map.json';
+
+
+            let F = new FileManager();
+            F.fileContents = F.loadStructure(url);
+            F.displayFolders();
+
+
+            console.log(F);
 
             let selectFolder = document.createElement("SELECT");
 
@@ -27,16 +37,16 @@
             option2.value = "DESC";
             selectFolder.add(option2);
             document.getElementById("selector").appendChild(selectFolder);
-            selectFolder.onchange = function (e){
-
-                sortFoldersASC(e.target.value);
-            };
-
-
+//            selectFolder.onchange = function (e){
+//
+//                sortFoldersASC(e.target.value);
+//            };
 
 
+//                F.sortContents();
 
-            showFolder(url);
+
+
 
 
 
