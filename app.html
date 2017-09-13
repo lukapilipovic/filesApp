@@ -42,6 +42,7 @@
                         while (searchR.hasChildNodes()) {
                             searchR.removeChild(searchR.lastChild);
                         }
+                        document.getElementById("demo").style.opacity = 1;
 
                       //F.filterIcons(inputS.value);
                   }
@@ -49,6 +50,7 @@
                   else if(e.keyCode===13){
 
                       F.filterIcons(inputS.value);
+                      document.getElementById("demo").style.opacity = 0.2;
                   }
 
 
