@@ -7,48 +7,19 @@
     <body>
     <script type="text/javascript" src="js/settings.js"></script>
     <script type="text/javascript" src="js/FileManager.js"></script>
+    <script type="text/javascript" src="js/Folder.js"></script>
+    <script type="text/javascript" src="js/Item.js"></script>
+    <script type="text/javascript" src="js/klaseTest.js"></script>
 
 
-    <div id="selector"></div>
+    
     <div id="demo"></div>
 
 
         <script type="text/javascript">
 
-
-
-            let F = new FileManager();
-            F.fileContents = F.loadStructure(url);
-            F.displayFolders();
-
-
-            console.log(F);
-
-            let selectFolder = document.createElement("SELECT");
-
-            selectFolder.id = "selectFolder";
-
-            let option1 = document.createElement("option");
-            option1.text = "Ascending";
-            option1.value = "ASC";
-            selectFolder.add(option1);
-            let option2 = document.createElement("option");
-            option2.text = "Descending";
-            option2.value = "DESC";
-            selectFolder.add(option2);
-            document.getElementById("selector").appendChild(selectFolder);
-//            selectFolder.onchange = function (e){
-//
-//                sortFoldersASC(e.target.value);
-//            };
-
-
-//                F.sortContents();
-
-
-
-
-
+              let F = new FileManager();
+              F.loadStructure(url);
 
         </script>
 

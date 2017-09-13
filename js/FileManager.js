@@ -1,151 +1,130 @@
 class FileManager {
 
-    constructor(fileContents = []) {
-
-        this.fileContents = fileContents;
+    constructor() {
+        this.content = [];
     }
 
 
-
-
-    loadStructure(url){
+    loadStructure(url) {
 
 
         //prepare output array
-        let contentArray = [];
+
 
         //get JSON with folder structure
+
+
         fetch(url).then(
             function (response) {
                 return response.json();
-            }).then(function (jsonData) {
+            }).then(
+            function (jsonData) {
+
+                //get root element
+                for (let itemKey of Object.keys(jsonData)) {
+
+                    //get children, which are <folder> elements
+                    let itemsList = jsonData[itemKey];
+                    // console.log(itemsList);
 
 
-            //get root element
-            for (let itemKey of Object.keys(jsonData)) {
-
-                //get children, which are <folder> elements
-                let itemsList = jsonData[itemKey];
-                // console.log(itemsList);
+                    //for each <folder> go inside
+                    for (let itemKey of Object.keys(itemsList)) {
 
 
-                //for each <folder> go inside
-                for (let itemKey of Object.keys(itemsList)) {
+                        let item = itemsList[itemKey];
+
+                        //create new instance of empty folder
+                        let folder = new Folder("emptyFolder");
 
 
-                    let item = itemsList[itemKey];
-
-                    //create new instance of empty folder
-                    let folder = new Folder("emptyFolder");
+                        //for each child inside <folder>
+                        for (let key of Object.keys(item)) {
 
 
-                    //for each child inside <folder>
-                    for (let key of Object.keys(item)) {
+                            //if child is folder name
+                            if (key === "folderName") {
+                                folder.folderName = item[key];
+
+                            }
+
+                            //if child is folderUrl
+                            else if (key === "folderUrl") {
+                                folder.folderUrl = item[key];
+
+                            }
+
+                            //if it is element
+                            else if (key === "folderElements") {
 
 
-                        //if child is folder name
-                        if (key === "folderName") {
-                            folder.folderName = item[key];
+                                for (let im of Object.keys(item[key])) {
 
-                        }
+                                    let imageUrl = folder.folderUrl + "/svg/" + item[key][im];
 
-                        //if child is folderUrl
-                        else if (key === "folderUrl") {
-                            folder.folderUrl = item[key];
-
-                        }
-
-                        //if it is element
-                        else if (key === "folderElements") {
-
-
-                            for (let im of Object.keys(item[key])) {
-
-                                let imageUrl = folder.folderUrl + "/svg/" + item[key][im];
-
-                                //create new Item and add to array of items
-                                let newItem = new Item(folder, imageUrl);
-                                folder.folderItems.push(newItem);
+                                    //create new Item and add to array of items
+                                    let newItem = new Item(folder, imageUrl);
+                                    folder.folderItems.push(newItem);
+                                }
                             }
                         }
+
+
+                        //add current folder to array
+                        this.content.push(folder);
+
+
                     }
-                    //add current folder to array
-                    contentArray.push(folder);
+
+                    this.sortContents();
+                    this.displayFolders(this.content);
+
+
                 }
+
+
+            }.bind(this));
+
+
+    }
+
+
+    sortContents(cond = "ASC") {
+
+        let condition = (cond === "ASC") ? 1 : -1;
+
+        this.content.sort(function (a, b) {
+
+            if (a.folderName < b.folderName) { //sort string ascending
+                return (-1 * condition);
             }
-
-            FileManager.sortContents(contentArray);
-
+            else if (a.folderName > b.folderName) {
+                return (1 * condition);
+            }
+            return 0;
         });
 
-        return contentArray;
-
-
-    }
-
-    static sortContents(arr,cond = "ASC"){
-
-            let condition = (cond=="ASC") ? 1 : -1;
-
-
-            arr.sort(function (a, b) {
-
-                if (a.folderName < b.folderName) { //sort string ascending
-                    return (-1 * condition);
-                }
-                else if (a.folderName > b.folderName) {
-                    return (1 * condition);
-                }
-                return 0;
-            });
-
-            return arr;
-
     }
 
 
-    displayFolders(){
+    displayFolders(foldersArray) {
 
-          //console.log(this.fileContents);
-          for (let folder of this.fileContents) {
 
-             console.log(folder);
-             //folder.showContents();
+        for (let folder of Object.keys(foldersArray)) {
+
+
+            document.getElementById("demo").appendChild(Folder.displayFolder(foldersArray[folder]));
         }
-    }
 
 
-
-
-}
-
-
-class Folder {
-
-    constructor(folderName, folderUrl = "",  folderParent = null, folderItems = []) {
-        this.folderName = folderName;
-        this.folderUrl = folderUrl;
-        this.folderParent = folderParent;
-        this.folderItems = folderItems;
-    }
-
-
-    showContents(){
-       console.log(this.folderName);
     }
 
 }
 
-class Item {
-     constructor(itemParent, itemUrl){
-         this.itemParent = itemParent;
-         this.itemUrl = itemUrl;
-     }
 
 
 
 
 
-}
 
 
