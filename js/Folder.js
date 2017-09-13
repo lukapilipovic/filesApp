@@ -28,12 +28,12 @@ class Folder {
 
 
         // prepare all items
-        let i = 0;
+
         for (let item of Object.keys(folder.folderItems)) {
 
             newSection.appendChild(Item.displayItem(folder.folderItems[item]));
 
-            i++;
+
         }
 
         fragment.appendChild(newSection);

@@ -12,7 +12,10 @@
     <script type="text/javascript" src="js/klaseTest.js"></script>
 
 
-    
+    <div id="search">
+        <input type="text" class="inputSearch" onsubmit="search()" id="inputSearch">
+        <div id="searchResults"></div>
+    </div>
     <div id="demo"></div>
 
 
@@ -20,6 +23,42 @@
 
               let F = new FileManager();
               F.loadStructure(url);
+
+
+
+              //setTimeout(F.findIcons("android"), 5000);
+
+              let numKeys = 0;
+
+              let inputS = document.getElementById("inputSearch");
+              let searchR = document.getElementById("searchResults");
+
+              inputS.addEventListener('keydown', (e) => {
+                  numKeys++;
+
+
+                  if(e.keyCode===8){
+                      console.log(e.keyCode);
+                        while (searchR.hasChildNodes()) {
+                            searchR.removeChild(searchR.lastChild);
+                        }
+
+                      //F.filterIcons(inputS.value);
+                  }
+
+                  else if(e.keyCode===13){
+
+                      F.filterIcons(inputS.value);
+                  }
+
+
+
+              });
+
+
+
+
+
 
         </script>
 

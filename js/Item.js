@@ -1,23 +1,24 @@
 class Item {
-    constructor(itemParent, itemUrl) {
+    constructor(itemParent, itemUrl, itemId) {
         this.itemParent = itemParent;
         this.itemUrl = itemUrl;
+        this.itemId = itemId;
     }
 
 
 
 
 
-    static displayItem(item,i) {
+    static displayItem(item) {
 
         let fragment = document.createDocumentFragment();
 
         let y = document.createElement("div");
-        y.id = "imgConatiner" + i;
+        y.id = "imgContainer" + item.itemId;
         y.className = "imgContainer";
         let x = document.createElement("img");
         x.src = item.itemUrl;
-        x.id = "img" + i;
+        x.id = "img" + item.itemId;
         x.className = "icon";
 
         let dl = document.createElement('a');

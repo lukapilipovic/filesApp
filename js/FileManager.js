@@ -2,6 +2,7 @@ class FileManager {
 
     constructor() {
         this.content = [];
+        this.indexMap = new Map();
     }
 
 
@@ -20,12 +21,15 @@ class FileManager {
             }).then(
             function (jsonData) {
 
+                let aPos = 0;
                 //get root element
                 for (let itemKey of Object.keys(jsonData)) {
 
                     //get children, which are <folder> elements
                     let itemsList = jsonData[itemKey];
                     // console.log(itemsList);
+
+
 
 
                     //for each <folder> go inside
@@ -63,8 +67,10 @@ class FileManager {
                                     let imageUrl = folder.folderUrl + "/svg/" + item[key][im];
 
                                     //create new Item and add to array of items
-                                    let newItem = new Item(folder, imageUrl);
+                                    let newItem = new Item(folder, imageUrl, aPos);
                                     folder.folderItems.push(newItem);
+                                    this.indexMap.set(aPos,newItem.itemUrl);
+                                    aPos++;
                                 }
                             }
                         }
@@ -84,6 +90,7 @@ class FileManager {
 
 
             }.bind(this));
+
 
 
     }
@@ -118,6 +125,31 @@ class FileManager {
 
 
     }
+
+    filterIcons(keyword){
+
+        this.indexMap.forEach(
+
+            (value, key) => {
+                if (value.includes(keyword)){
+                    let id = "imgContainer" + key;
+                    //console.log(key, value);
+
+                    document.getElementById('searchResults').appendChild(document.getElementById(id).cloneNode(true));
+
+                }
+
+            });
+
+
+
+
+
+
+
+
+    }
+
 
 }
 
